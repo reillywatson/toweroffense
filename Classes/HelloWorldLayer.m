@@ -9,6 +9,10 @@
 
 // Import the interfaces
 #import "HelloWorldLayer.h"
+#import "ccMacros.h"
+
+CCSprite *boy;
+CCSprite *girl;
 
 // HelloWorldLayer implementation
 @implementation HelloWorldLayer
@@ -35,19 +39,28 @@
 	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super init])) {
 		
-		// create and initialize a Label
-		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Hello World" fontName:@"Marker Felt" fontSize:64];
+		boy = [CCSprite spriteWithFile:@"Character Boy.png"];
+		boy.position = ccp(100,100);
+		[self addChild:boy];
 
-		// ask director the the window size
-		CGSize size = [[CCDirector sharedDirector] winSize];
-	
-		// position the label on the center of the screen
-		label.position =  ccp( size.width /2 , size.height/2 );
+		girl = [CCSprite spriteWithFile:@"Character Cat Girl.png"];
+		girl.position = ccp(300,200);
+		[self addChild:girl];
+		[self schedule:@selector(nextFrame:)];
 		
-		// add the label as a child to this Layer
-		[self addChild: label];
 	}
 	return self;
+}
+
+-(void) nextFrame:(ccTime)dt {
+	CGSize windowSize = [[CCDirector sharedDirector] winSize];
+	boy.position = ccp(MAX(0, MIN(boy.position.x + (1000*dt*CCRANDOM_MINUS1_1()), windowSize.width - (boy.contentSize.width / 2))), MAX((boy.contentSize.height / 2), MIN(boy.position.y + (300*dt*CCRANDOM_MINUS1_1()), windowSize.height)));
+	if (girl.position.x != boy.position.x) {
+		girl.position = ccp(girl.position.x + (boy.position.x > girl.position.x ? 1 : -1) * 10 * dt, girl.position.y);
+	}
+	if (girl.position.y != boy.position.y) {
+		girl.position = ccp(girl.position.x, girl.position.y + (boy.position.y > girl.position.y ? 1 : -1) * 10 * dt);
+	}
 }
 
 // on "dealloc" you need to release all your retained objects
