@@ -11,11 +11,11 @@
 #import "HelloWorldLayer.h"
 #import "ccMacros.h"
 
-CCSprite *boy;
-CCSprite *girl;
-
 // HelloWorldLayer implementation
 @implementation HelloWorldLayer
+
+@synthesize tileMap = _tileMap;
+@synthesize background = _background;
 
 +(CCScene *) scene
 {
@@ -38,20 +38,45 @@ CCSprite *girl;
 	// always call "super" init
 	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super init])) {
-		
-		boy = [CCSprite spriteWithFile:@"Character Boy.png"];
-		boy.position = ccp(100,100);
-		[self addChild:boy];
-
-		girl = [CCSprite spriteWithFile:@"Character Cat Girl.png"];
-		girl.position = ccp(300,200);
-		[self addChild:girl];
-		[self schedule:@selector(nextFrame:)];
-		
+        
+        self.tileMap = [CCTMXTiledMap tiledMapWithTMXFile:@"TileMap.tmx"];
+        self.background = [_tileMap layerNamed:@"Background"];
+        
+        _panZoomLayer = [[CCLayerPanZoom node] retain];
+        [self addChild: _panZoomLayer];
+        [_panZoomLayer addChild:_tileMap z:0 tag: 1];
+        _panZoomLayer.minScale = 1.0f;
+        _panZoomLayer.rubberEffectRatio = 0.0f;
+        
+        // I keep getting the wrong coordinates with this nonesense.
+        //CGSize mapSize = _tileMap.mapSize;
+        //_panZoomLayer.panBoundsRect = CGRectMake(0, 0, mapSize.width, mapSize.height);
+        
 	}
 	return self;
 }
 
+-(void)setViewpointCenter:(CGPoint) position
+{    
+    CGSize windowSize = [[CCDirector sharedDirector] winSize];
+    
+    int x = MAX(position.x, windowSize.width / 2);
+    int y = MAX(position.y, windowSize.height / 2);
+    x = MIN(x, (_tileMap.mapSize.width * _tileMap.tileSize.width) - windowSize.width / 2);
+    y = MIN(y, (_tileMap.mapSize.height * _tileMap.tileSize.height) - windowSize.height/2);
+    CGPoint actualPosition = ccp(x, y);
+    
+    CGPoint centerOfView = ccp(windowSize.width/2, windowSize.height/2);
+    CGPoint viewPoint = ccpSub(centerOfView, actualPosition);
+    self.position = viewPoint;
+}
+
+-(void) ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+
+}
+
+/*
 -(void) nextFrame:(ccTime)dt {
 	CGSize windowSize = [[CCDirector sharedDirector] winSize];
 	boy.position = ccp(MAX(0, MIN(boy.position.x + (1000*dt*CCRANDOM_MINUS1_1()), windowSize.width - (boy.contentSize.width / 2))), MAX((boy.contentSize.height / 2), MIN(boy.position.y + (300*dt*CCRANDOM_MINUS1_1()), windowSize.height)));
@@ -62,6 +87,7 @@ CCSprite *girl;
 		girl.position = ccp(girl.position.x, girl.position.y + (boy.position.y > girl.position.y ? 1 : -1) * 10 * dt);
 	}
 }
+ */
 
 // on "dealloc" you need to release all your retained objects
 - (void) dealloc
@@ -71,6 +97,8 @@ CCSprite *girl;
 	// cocos2d will automatically release all the children (Label)
 	
 	// don't forget to call "super dealloc"
+    self.tileMap = nil;
+    self.background = nil;
 	[super dealloc];
 }
 @end

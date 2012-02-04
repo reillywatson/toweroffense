@@ -9,13 +9,20 @@
 
 // When you import this file, you import all the cocos2d classes
 #import "cocos2d.h"
+#import "CCLayerPanZoom.h"
 
 // HelloWorldLayer
 @interface HelloWorldLayer : CCLayer
 {
+    CCTMXTiledMap *_tileMap;
+    CCTMXLayer *_background;
+    CCLayerPanZoom *_panZoomLayer;
 }
 
 // returns a CCScene that contains the HelloWorldLayer as the only child
 +(CCScene *) scene;
+
+@property (nonatomic, retain) CCTMXTiledMap *tileMap;
+@property (nonatomic, retain) CCTMXLayer *background;
 
 @end
