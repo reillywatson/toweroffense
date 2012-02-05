@@ -16,6 +16,7 @@
 
 @synthesize tileMap = _tileMap;
 @synthesize background = _background;
+@synthesize meta = _meta;
 
 +(CCScene *) scene
 {
@@ -32,11 +33,8 @@
 	return scene;
 }
 
-// on "init" you need to initialize your instance
 -(id) init
 {
-	// always call "super" init
-	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super init])) {
         
         self.tileMap = [CCTMXTiledMap tiledMapWithTMXFile:@"TileMap.tmx"];
@@ -48,10 +46,10 @@
         _panZoomLayer.minScale = 1.0f;
         _panZoomLayer.rubberEffectRatio = 0.0f;
         
-        // I keep getting the wrong coordinates with this nonesense.
-        //CGSize mapSize = _tileMap.mapSize;
-        //_panZoomLayer.panBoundsRect = CGRectMake(0, 0, mapSize.width, mapSize.height);
+        self.meta = [_tileMap layerNamed:@"Meta"];
+        _meta.visible = NO;
         
+        // TODO figure out the right bounds for the map.
 	}
 	return self;
 }
@@ -99,6 +97,7 @@
 	// don't forget to call "super dealloc"
     self.tileMap = nil;
     self.background = nil;
+    self.meta = nil;
 	[super dealloc];
 }
 @end

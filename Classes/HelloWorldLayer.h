@@ -16,6 +16,7 @@
 {
     CCTMXTiledMap *_tileMap;
     CCTMXLayer *_background;
+    CCTMXLayer *_meta;
     CCLayerPanZoom *_panZoomLayer;
 }
 
@@ -24,5 +25,6 @@
 
 @property (nonatomic, retain) CCTMXTiledMap *tileMap;
 @property (nonatomic, retain) CCTMXLayer *background;
+@property (nonatomic, retain) CCTMXLayer *meta;
 
 @end
