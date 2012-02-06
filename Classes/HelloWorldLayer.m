@@ -17,6 +17,7 @@
 @synthesize tileMap = _tileMap;
 @synthesize background = _background;
 @synthesize meta = _meta;
+@synthesize critter = _critter;
 
 +(CCScene *) scene
 {
@@ -31,6 +32,32 @@
 	
 	// return the scene
 	return scene;
+}
+
+-(void) moveCritter:(CCSprite *) critter: (CGPoint) position: (ccTime) speed
+{
+    if (CGPointEqualToPoint(critter.position, position)) {
+        return;
+    }
+    
+    id actionMove = [CCMoveBy actionWithDuration:speed
+                                        position:ccpMult(ccpNormalize(ccpSub(position,critter.position)), 10)];
+    id actionMoveDone = [CCCallFuncN actionWithTarget:self
+                                             selector:@selector(critterMoveFinished:)];
+    [critter runAction: [CCSequence actions:actionMove, actionMoveDone, nil]];
+}
+
+-(void) animateCritter:(CCSprite *)critter
+{
+    // TODO this is where we probably want to have the path-finding algorithm, as well as
+    // checks to see if the guy made it to the base.
+    [self moveCritter:critter :ccp(critter.position.x + 1, critter.position.y) :0.5];
+}
+
+-(void) critterMoveFinished:(id)sender
+{
+    CCSprite *critter = (CCSprite *)sender;
+    [self animateCritter: critter];
 }
 
 -(id) init
@@ -50,6 +77,12 @@
         _meta.visible = NO;
         
         // TODO figure out the right bounds for the map.
+        
+        self.critter = [CCSprite spriteWithFile:@"Player.png"];
+        // TODO need actual spawn point / points? have to make some design decisions.
+        _critter.position = ccp(0, 200);
+        [self animateCritter:_critter];
+        [_panZoomLayer addChild:_critter]; 
 	}
 	return self;
 }
@@ -98,6 +131,7 @@
     self.tileMap = nil;
     self.background = nil;
     self.meta = nil;
+    self.critter = nil;
 	[super dealloc];
 }
 @end

@@ -18,6 +18,7 @@
     CCTMXLayer *_background;
     CCTMXLayer *_meta;
     CCLayerPanZoom *_panZoomLayer;
+    CCSprite *_critter;
 }
 
 // returns a CCScene that contains the HelloWorldLayer as the only child
@@ -26,5 +27,6 @@
 @property (nonatomic, retain) CCTMXTiledMap *tileMap;
 @property (nonatomic, retain) CCTMXLayer *background;
 @property (nonatomic, retain) CCTMXLayer *meta;
+@property (nonatomic, retain) CCSprite *critter;
 
 @end
