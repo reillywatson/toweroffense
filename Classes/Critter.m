@@ -10,9 +10,6 @@
 #import "Critter.h"
 #import "HelloWorldLayer.h"
 
-
-static const float kMovingSpeed = 0.4;
-
 // A class that represents a step of the computed path
 @interface ShortestPathStep : NSObject
 {
@@ -56,6 +53,7 @@ static const float kMovingSpeed = 0.4;
 @synthesize shortestPath;
 @synthesize currentStepAction;
 @synthesize pendingMove;
+@synthesize speed;
 
 
 - (id)initWithLayer:(HelloWorldLayer *)layer
@@ -285,7 +283,7 @@ static const float kMovingSpeed = 0.4;
 	ShortestPathStep *s = [self.shortestPath objectAtIndex:0];
 	
 	// Prepare the action and the callback
-	id moveAction = [CCMoveTo actionWithDuration:kMovingSpeed position:[_layer positionForTileCoordinate:s.position]];
+	id moveAction = [CCMoveTo actionWithDuration:self.speed position:[_layer positionForTileCoordinate:s.position]];
 	id moveCallback = [CCCallFunc actionWithTarget:self selector:@selector(popStepAndAnimate)]; // set the method itself as the callback
 	self.currentStepAction = [CCSequence actions:moveAction, moveCallback, nil];
 	

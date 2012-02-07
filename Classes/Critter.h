@@ -22,6 +22,8 @@
     NSValue *pendingMove;
 }
 
+@property double speed;
+
 - (id)initWithLayer:(HelloWorldLayer *)layer;
 - (void)moveToward:(CGPoint)target;
 
