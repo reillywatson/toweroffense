@@ -125,6 +125,9 @@ enum
 /** initializes a TMX Tiled Map with a TMX file */
 -(id) initWithTMXFile:(NSString*)tmxFile;
 
+/** return an autoreleased array of all the TMXLayers */
+-(NSArray *) allLayers;
+
 /** return the TMXLayer for the specific layer */
 -(CCTMXLayer*) layerNamed:(NSString *)layerName;
 

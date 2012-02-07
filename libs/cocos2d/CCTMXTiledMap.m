@@ -160,13 +160,23 @@
 
 // public
 
--(CCTMXLayer*) layerNamed:(NSString *)layerName 
+-(NSArray *) allLayers 
 {
+	NSMutableArray *layers = [NSMutableArray arrayWithCapacity:[children_ count]];
 	CCTMXLayer *layer;
 	CCARRAY_FOREACH(children_, layer) {
 		if([layer isKindOfClass:[CCTMXLayer class]])
-			if([layer.layerName isEqual:layerName])
-				return layer;
+			[layers addObject:layer];
+	}
+	return layers;
+}
+
+
+-(CCTMXLayer*) layerNamed:(NSString *)layerName 
+{
+	for (CCTMXLayer *layer in [self allLayers]) {
+		if([layer.layerName isEqual:layerName])
+			return layer;
 	}
 	
 	// layer not found

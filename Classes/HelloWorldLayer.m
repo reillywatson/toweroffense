@@ -113,34 +113,32 @@
     }
 }
 
+-(BOOL)tileAtCoordinate:(CGPoint)tileCoordinate hasProperty:(NSString *)property
+{
+	NSArray *layers = [_tileMap allLayers];
+	for (CCTMXLayer *layer in layers) {
+		int tileGid = [layer tileGIDAt:tileCoordinate];
+		if (tileGid) {
+			NSDictionary *properties = [_tileMap propertiesForGID:tileGid];
+			if (properties) {
+				NSString *value = [properties valueForKey:property];
+				if (value) {
+					return YES;
+				}
+			}
+		}
+	}
+	return NO;
+}
+
 -(BOOL)isWallAtTileCoordinate:(CGPoint)tileCoordinate
 {
-    int tileGid = [_meta tileGIDAt:tileCoordinate];
-    if (tileGid) {
-        NSDictionary *properties = [_tileMap propertiesForGID:tileGid];
-        if (properties) {
-            NSString *collision = [properties valueForKey:@"Collidable"];
-            if (collision && [collision compare:@"true"] == NSOrderedSame) {
-                return YES;
-            }
-        }
-    }
-    return NO;
+	return [self tileAtCoordinate:tileCoordinate hasProperty:@"Collidable"];
 }
 
 -(BOOL)isBaseAtTileCoordinate:(CGPoint)tileCoordinate
 {
-    int tileGid = [_meta tileGIDAt:tileCoordinate];
-    if (tileGid) {
-        NSDictionary *properties = [_tileMap propertiesForGID:tileGid];
-        if (properties) {
-            NSString *collision = [properties valueForKey:@"Base"];
-            if (collision && [collision compare:@"true"] == NSOrderedSame) {
-                return YES;
-            }
-        }
-    }
-    return NO;
+	return [self tileAtCoordinate:tileCoordinate hasProperty:@"Base"];
 }
 
 -(CGPoint)tileCoordinateForPosition:(CGPoint)position
