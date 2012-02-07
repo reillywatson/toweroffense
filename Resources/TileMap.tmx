@@ -163,19 +163,6 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="49" name="meta_tiles" tilewidth="32" tileheight="32" spacing="1" margin="1">
-  <image source="meta_tiles.png" width="67" height="34"/>
-  <tile id="0">
-   <properties>
-    <property name="Collidable" value="true"/>
-   </properties>
-  </tile>
-  <tile id="1">
-   <properties>
-    <property name="Base" value="true"/>
-   </properties>
-  </tile>
- </tileset>
  <layer name="Background" width="50" height="50">
   <data encoding="base64" compression="zlib">
    eJzt2MsOgjAQheGqK3XlbeENo268JL7/4zndEUzLILU9g2fxbwiQfExJCpVzrurRWbr2vAdCdGBFB1Z0YEUHVnRgRQdWdGBFB1Z0YEUHVnRglcpxqxU7B92htaI42p55qVLMYySNA00MOabSLNC8sGMr7aS9cYc/flHOqu5YSxuFI/U7dpeeCR0H6VhgHrE5feMota7+2dFc2wtpGWiluB5lHl0biqPZyYjjlfH5p3Ag7r1yrKsc5pzvBx10WCvk8Pt5zV4epZDD2v+VoTj8d8nDfX6bWHPE5kQHTr9yvAHYviLz
