@@ -207,24 +207,6 @@
 	return [NSArray arrayWithArray:tmp];
 }
 
--(void) ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-
-}
-
-/*
--(void) nextFrame:(ccTime)dt {
-	CGSize windowSize = [[CCDirector sharedDirector] winSize];
-	boy.position = ccp(MAX(0, MIN(boy.position.x + (1000*dt*CCRANDOM_MINUS1_1()), windowSize.width - (boy.contentSize.width / 2))), MAX((boy.contentSize.height / 2), MIN(boy.position.y + (300*dt*CCRANDOM_MINUS1_1()), windowSize.height)));
-	if (girl.position.x != boy.position.x) {
-		girl.position = ccp(girl.position.x + (boy.position.x > girl.position.x ? 1 : -1) * 10 * dt, girl.position.y);
-	}
-	if (girl.position.y != boy.position.y) {
-		girl.position = ccp(girl.position.x, girl.position.y + (boy.position.y > girl.position.y ? 1 : -1) * 10 * dt);
-	}
-}
- */
-
 // on "dealloc" you need to release all your retained objects
 - (void) dealloc
 {
