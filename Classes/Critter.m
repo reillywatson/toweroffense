@@ -1,10 +1,11 @@
 //
-//  CatSprite.m
-//  CatThief
+//  Critter.m
+//  TowerOffense
 //
-//  Created by Ray Wenderlich on 6/7/11.
-//  Copyright 2011 Ray Wenderlich. All rights reserved.
+//  Created by Sergey Perunov on 02-05-2012.
+//  Copyright 2011 Sergey Perunov. All rights reserved.
 //
+
 
 #import "Critter.h"
 #import "HelloWorldLayer.h"
@@ -286,9 +287,6 @@ static const float kMovingSpeed = 0.4;
 	
 	// Get the next step to move to
 	ShortestPathStep *s = [self.shortestPath objectAtIndex:0];
-	
-	CGPoint futurePosition = s.position;
-	CGPoint diff = ccpSub(futurePosition, currentPosition);
 	
 	// Prepare the action and the callback
 	id moveAction = [CCMoveTo actionWithDuration:kMovingSpeed position:[_layer positionForTileCoordinate:s.position]];

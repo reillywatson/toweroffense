@@ -1,20 +1,18 @@
 //
-//  CatSprite.h
-//  CatThief
+//  Critter.h
+//  TowerOffense
 //
-//  Created by Ray Wenderlich on 6/7/11.
-//  Copyright 2011 Ray Wenderlich. All rights reserved.
+//  Created by Sergey Perunov on 02-05-2012.
+//  Copyright 2011 Sergey Perunov. All rights reserved.
 //
 
 #import "cocos2d.h"
-#import <OpenAL/al.h>
 
 @class HelloWorldLayer;
 
 @interface Critter : CCSprite {
     HelloWorldLayer * _layer;
     CCAnimate *_curAnimate;
-    int _numBones;
 	
 @private
 	NSMutableArray *spOpenSteps;
