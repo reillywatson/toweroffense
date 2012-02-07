@@ -86,8 +86,16 @@ static const float kMovingSpeed = 0.4;
 	[super dealloc];
 }
 
-- (void)moveToward:(CGPoint)target
-{	
+- (void)updatePath
+{
+	[spOpenSteps release]; spOpenSteps = nil;
+	[spClosedSteps release]; spClosedSteps = nil;
+	[shortestPath release]; shortestPath = nil;
+	[self moveToward:_target];
+}
+
+- (void)moveTowardImpl:(CGPoint)target
+{
 	// Start by stoping the current moving action
     if (currentStepAction) {
         self.pendingMove = [NSValue valueWithCGPoint:target];
@@ -203,6 +211,12 @@ static const float kMovingSpeed = 0.4;
 		}
 		
 	} while ([self.spOpenSteps count] > 0);
+}
+
+-(void)moveToward:(CGPoint)target
+{
+	_target = target;
+	[self moveTowardImpl:target];
 }
 
 // Insert a path step (ShortestPathStep) in the ordered open steps list (spOpenSteps)

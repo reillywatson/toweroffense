@@ -59,6 +59,17 @@
     [self animateCritter: critter];
 }
 
+-(void)placeTowerAtTileCoordinate:(CGPoint)coords
+{
+	[self.background setTileGID:47 at:coords];
+	// need to update the path of all critters
+	for (CCNode *node in _panZoomLayer.children) {
+		if ([node isKindOfClass:[Critter class]]) {
+			[((Critter *)node) updatePath];
+		}
+	}
+}
+
 -(id) init
 {
 	if( (self=[super init])) {
@@ -78,6 +89,16 @@
         critter.position = ccp(0,200);
         [_panZoomLayer addChild:critter]; 
         [critter moveToward:[self positionForTileCoordinate:ccp(49,35)]];
+		
+		[self placeTowerAtTileCoordinate:ccp(48,34)];
+		[self placeTowerAtTileCoordinate:ccp(48,35)];
+		[self placeTowerAtTileCoordinate:ccp(48,36)];
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 25 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+			[self placeTowerAtTileCoordinate:ccp(49,36)];
+		});
+//		Tower *tower = [[[Tower alloc] initWithLayer:self] autorelease];
+//		tower.position = ccp(20,200);
+//		[_panZoomLayer addChild:tower];
 
 	}
 	return self;

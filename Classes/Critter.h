@@ -20,9 +20,11 @@
     NSMutableArray *shortestPath;
 	CCAction *currentStepAction;
     NSValue *pendingMove;
+	CGPoint _target;
 }
 
 - (id)initWithLayer:(HelloWorldLayer *)layer;
 - (void)moveToward:(CGPoint)target;
+- (void)updatePath;
 
 @end
