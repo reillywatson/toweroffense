@@ -272,7 +272,7 @@ static const float kMovingSpeed = 0.4;
         CGPoint moveTarget = [pendingMove CGPointValue];
         self.pendingMove = nil;
 		self.shortestPath = nil;
-        [self moveToward:moveTarget];
+        [self moveTowardImpl:moveTarget];
         return;
     }
     
