@@ -17,7 +17,6 @@
 
 @synthesize tileMap = _tileMap;
 @synthesize background = _background;
-@synthesize meta = _meta;
 
 +(CCScene *) scene
 {
@@ -72,10 +71,7 @@
         [_panZoomLayer addChild:_tileMap z:0 tag: 1];
         _panZoomLayer.minScale = 1.0f;
         _panZoomLayer.rubberEffectRatio = 0.0f;
-        
-        self.meta = [_tileMap layerNamed:@"Meta"];
-        _meta.visible = NO;
-        
+                
         // TODO figure out the right bounds for the map.
         
         Critter *critter = [[[Critter alloc] initWithLayer:self] autorelease];
@@ -214,7 +210,6 @@
 	// don't forget to call "super dealloc"
     self.tileMap = nil;
     self.background = nil;
-    self.meta = nil;
 	[super dealloc];
 }
 @end
