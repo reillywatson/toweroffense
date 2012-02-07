@@ -33,32 +33,6 @@
 	return scene;
 }
 
--(void) moveCritter:(CCSprite *) critter: (CGPoint) position: (ccTime) speed
-{
-    if (CGPointEqualToPoint(critter.position, position)) {
-        return;
-    }
-    
-    id actionMove = [CCMoveBy actionWithDuration:speed
-                                        position:ccpMult(ccpNormalize(ccpSub(position,critter.position)), 10)];
-    id actionMoveDone = [CCCallFuncN actionWithTarget:self
-                                             selector:@selector(critterMoveFinished:)];
-    [critter runAction: [CCSequence actions:actionMove, actionMoveDone, nil]];
-}
-
--(void) animateCritter:(CCSprite *)critter
-{
-    // TODO this is where we probably want to have the path-finding algorithm, as well as
-    // checks to see if the guy made it to the base.
-    [self moveCritter:critter :ccp(critter.position.x + 1, critter.position.y) :0.5];
-}
-
--(void) critterMoveFinished:(id)sender
-{
-    CCSprite *critter = (CCSprite *)sender;
-    [self animateCritter: critter];
-}
-
 -(id) init
 {
 	if( (self=[super init])) {
@@ -155,27 +129,61 @@
 {
 	NSMutableArray *tmp = [NSMutableArray arrayWithCapacity:4];
     
+    BOOL t = NO;
+    BOOL l = NO;
+    BOOL b = NO;
+    BOOL r = NO;
+    
 	// Top
 	CGPoint p = CGPointMake(tileCoordinate.x, tileCoordinate.y - 1);
 	if ([self isValidTileCoord:p] && ![self isWallAtTileCoordinate:p]) {
 		[tmp addObject:[NSValue valueWithCGPoint:p]];
+        t = YES;
 	}
     
 	// Left
 	p = CGPointMake(tileCoordinate.x - 1, tileCoordinate.y);
 	if ([self isValidTileCoord:p] && ![self isWallAtTileCoordinate:p]) {
 		[tmp addObject:[NSValue valueWithCGPoint:p]];
+        l = YES;
 	}
     
 	// Bottom
 	p = CGPointMake(tileCoordinate.x, tileCoordinate.y + 1);
 	if ([self isValidTileCoord:p] && ![self isWallAtTileCoordinate:p]) {
 		[tmp addObject:[NSValue valueWithCGPoint:p]];
+        b = YES;
 	}
     
 	// Right
 	p = CGPointMake(tileCoordinate.x + 1, tileCoordinate.y);
 	if ([self isValidTileCoord:p] && ![self isWallAtTileCoordinate:p]) {
+		[tmp addObject:[NSValue valueWithCGPoint:p]];
+        r = YES;
+	}
+    
+    
+	// Top Left
+	p = CGPointMake(tileCoordinate.x - 1, tileCoordinate.y - 1);
+	if (t && l && [self isValidTileCoord:p] && ![self isWallAtTileCoordinate:p]) {
+		[tmp addObject:[NSValue valueWithCGPoint:p]];
+	}
+    
+	// Bottom Left
+	p = CGPointMake(tileCoordinate.x - 1, tileCoordinate.y + 1);
+	if (b && l && [self isValidTileCoord:p] && ![self isWallAtTileCoordinate:p]) {
+		[tmp addObject:[NSValue valueWithCGPoint:p]];
+	}
+    
+	// Top Right
+	p = CGPointMake(tileCoordinate.x + 1, tileCoordinate.y - 1);
+	if (t && r && [self isValidTileCoord:p] && ![self isWallAtTileCoordinate:p]) {
+		[tmp addObject:[NSValue valueWithCGPoint:p]];
+	}
+    
+	// Bottom Right
+	p = CGPointMake(tileCoordinate.x + 1, tileCoordinate.y + 1);
+	if (b && r && [self isValidTileCoord:p] && ![self isWallAtTileCoordinate:p]) {
 		[tmp addObject:[NSValue valueWithCGPoint:p]];
 	}
     

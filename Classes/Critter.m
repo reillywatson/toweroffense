@@ -32,9 +32,6 @@ static const float kMovingSpeed = 0.4;
 
 @end
 
-
-
-
 // Private properties and methods
 @interface Critter ()
 
@@ -63,7 +60,6 @@ static const float kMovingSpeed = 0.4;
 
 - (id)initWithLayer:(HelloWorldLayer *)layer
 {
-//    if ((self = [super initWithSpriteFrameName:@"cat_forward_1.png"])) {
     if ((self = [super initWithFile:@"Player.png"])) {
         _layer = layer;
 		
@@ -232,7 +228,7 @@ static const float kMovingSpeed = 0.4;
 // Compute the cost of moving from a step to an adjecent one
 - (int)costToMoveFromStep:(ShortestPathStep *)fromStep toAdjacentStep:(ShortestPathStep *)toStep
 {
-	return ((fromStep.position.x != toStep.position.x) && (fromStep.position.y != toStep.position.y)) ? 14 : 10;
+    return ((fromStep.position.x != toStep.position.x) && (fromStep.position.y != toStep.position.y)) ? 14 : 10;
 }
 
 
