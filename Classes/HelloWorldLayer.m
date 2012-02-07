@@ -10,6 +10,7 @@
 // Import the interfaces
 #import "HelloWorldLayer.h"
 #import "ccMacros.h"
+#import "Critter.h"
 
 // HelloWorldLayer implementation
 @implementation HelloWorldLayer
@@ -17,7 +18,6 @@
 @synthesize tileMap = _tileMap;
 @synthesize background = _background;
 @synthesize meta = _meta;
-@synthesize critter = _critter;
 
 +(CCScene *) scene
 {
@@ -78,11 +78,11 @@
         
         // TODO figure out the right bounds for the map.
         
-        self.critter = [CCSprite spriteWithFile:@"Player.png"];
-        // TODO need actual spawn point / points? have to make some design decisions.
-        _critter.position = ccp(0, 200);
-        [self animateCritter:_critter];
-        [_panZoomLayer addChild:_critter]; 
+        Critter *critter = [[[Critter alloc] initWithLayer:self] autorelease];
+        critter.position = ccp(0,200);
+        [_panZoomLayer addChild:critter]; 
+        [critter moveToward:[self positionForTileCoordinate:ccp(49,35)]];
+
 	}
 	return self;
 }
@@ -100,6 +100,92 @@
     CGPoint centerOfView = ccp(windowSize.width/2, windowSize.height/2);
     CGPoint viewPoint = ccpSub(centerOfView, actualPosition);
     self.position = viewPoint;
+}
+
+-(BOOL)isValidTileCoord:(CGPoint)tileCoord
+{
+    if (tileCoord.x < 0 || tileCoord.y < 0 || 
+        tileCoord.x >= _tileMap.mapSize.width ||
+        tileCoord.y >= _tileMap.mapSize.height) {
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
+-(BOOL)isWallAtTileCoordinate:(CGPoint)tileCoordinate
+{
+    int tileGid = [_meta tileGIDAt:tileCoordinate];
+    if (tileGid) {
+        NSDictionary *properties = [_tileMap propertiesForGID:tileGid];
+        if (properties) {
+            NSString *collision = [properties valueForKey:@"Collidable"];
+            if (collision && [collision compare:@"true"] == NSOrderedSame) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+-(BOOL)isBaseAtTileCoordinate:(CGPoint)tileCoordinate
+{
+    int tileGid = [_meta tileGIDAt:tileCoordinate];
+    if (tileGid) {
+        NSDictionary *properties = [_tileMap propertiesForGID:tileGid];
+        if (properties) {
+            NSString *collision = [properties valueForKey:@"Base"];
+            if (collision && [collision compare:@"true"] == NSOrderedSame) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+-(CGPoint)tileCoordinateForPosition:(CGPoint)position
+{
+    int x = position.x / _tileMap.tileSize.width;
+    int y = ((_tileMap.mapSize.height * _tileMap.tileSize.height) - position.y) / _tileMap.tileSize.height;
+    return ccp(x, y);
+}
+
+-(CGPoint)positionForTileCoordinate:(CGPoint)tileCoordinate
+{
+    int x = (tileCoordinate.x * _tileMap.tileSize.width) + _tileMap.tileSize.width/2;
+    int y = (_tileMap.mapSize.height * _tileMap.tileSize.height) - (tileCoordinate.y * _tileMap.tileSize.height) - _tileMap.tileSize.height/2;
+    return ccp(x, y);
+}
+
+-(NSArray *)walkableAdjacentTilesCoordForTileCoordinate:(CGPoint)tileCoordinate
+{
+	NSMutableArray *tmp = [NSMutableArray arrayWithCapacity:4];
+    
+	// Top
+	CGPoint p = CGPointMake(tileCoordinate.x, tileCoordinate.y - 1);
+	if ([self isValidTileCoord:p] && ![self isWallAtTileCoordinate:p]) {
+		[tmp addObject:[NSValue valueWithCGPoint:p]];
+	}
+    
+	// Left
+	p = CGPointMake(tileCoordinate.x - 1, tileCoordinate.y);
+	if ([self isValidTileCoord:p] && ![self isWallAtTileCoordinate:p]) {
+		[tmp addObject:[NSValue valueWithCGPoint:p]];
+	}
+    
+	// Bottom
+	p = CGPointMake(tileCoordinate.x, tileCoordinate.y + 1);
+	if ([self isValidTileCoord:p] && ![self isWallAtTileCoordinate:p]) {
+		[tmp addObject:[NSValue valueWithCGPoint:p]];
+	}
+    
+	// Right
+	p = CGPointMake(tileCoordinate.x + 1, tileCoordinate.y);
+	if ([self isValidTileCoord:p] && ![self isWallAtTileCoordinate:p]) {
+		[tmp addObject:[NSValue valueWithCGPoint:p]];
+	}
+    
+	return [NSArray arrayWithArray:tmp];
 }
 
 -(void) ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -131,7 +217,6 @@
     self.tileMap = nil;
     self.background = nil;
     self.meta = nil;
-    self.critter = nil;
 	[super dealloc];
 }
 @end

@@ -18,15 +18,19 @@
     CCTMXLayer *_background;
     CCTMXLayer *_meta;
     CCLayerPanZoom *_panZoomLayer;
-    CCSprite *_critter;
 }
 
 // returns a CCScene that contains the HelloWorldLayer as the only child
 +(CCScene *) scene;
+-(NSArray *)walkableAdjacentTilesCoordForTileCoordinate
+:(CGPoint)tileCoordinate;
+-(BOOL)isBaseAtTileCoordinate:(CGPoint)tileCoordinate;
+-(BOOL)isWallAtTileCoordinate:(CGPoint)tileCoordinate;
+-(CGPoint)tileCoordinateForPosition:(CGPoint)position;
+-(CGPoint)positionForTileCoordinate:(CGPoint)tileCoordinate;
 
 @property (nonatomic, retain) CCTMXTiledMap *tileMap;
 @property (nonatomic, retain) CCTMXLayer *background;
 @property (nonatomic, retain) CCTMXLayer *meta;
-@property (nonatomic, retain) CCSprite *critter;
 
 @end
