@@ -20,11 +20,13 @@
     NSMutableArray *shortestPath;
 	CCAction *currentStepAction;
     NSValue *pendingMove;
+	CGPoint _target;
 }
 
 @property double speed;
 
 - (id)initWithLayer:(HelloWorldLayer *)layer;
 - (void)moveToward:(CGPoint)target;
+- (void)updatePath;
 
 @end
