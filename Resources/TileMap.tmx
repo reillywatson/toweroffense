@@ -165,6 +165,7 @@
   <tile id="46">
    <properties>
     <property name="Collidable" value="true"/>
+	<property name="Name" value="Tower1"/>
     <property name="Tower" value="true"/>
    </properties>
   </tile>

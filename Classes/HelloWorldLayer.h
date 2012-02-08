@@ -17,6 +17,8 @@
     CCTMXTiledMap *_tileMap;
     CCTMXLayer *_background;
     CCLayerPanZoom *_panZoomLayer;
+	NSMutableArray *_towers;
+	NSMutableArray *_projectiles;
 }
 
 // returns a CCScene that contains the HelloWorldLayer as the only child

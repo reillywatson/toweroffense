@@ -12,6 +12,25 @@
 #import "ccMacros.h"
 #import "Critter.h"
 
+@interface CCTMXTiledMap (PrivateExtensions)
+-(void)setTile:(NSString*)name onLayer:(CCTMXLayer *)layer at:(CGPoint)coords;
+@end
+
+@implementation CCTMXTiledMap (PrivateExtensions)
+// If this turns out to be too slow, we can cache the results, because Name isn't going to change
+-(void)setTile:(NSString*)name onLayer:(CCTMXLayer *)layer at:(CGPoint)coords
+{
+	NSArray *tileGIDs = [tileProperties_ allKeys];
+	for (NSNumber *gid in tileGIDs) {
+		NSString *tileName = [[tileProperties_ objectForKey:gid] valueForKey:@"Name"];
+		if ([tileName isEqualToString:name]) {
+			[layer setTileGID:[gid intValue] at:coords];
+			break;
+		}
+	}
+}
+@end
+
 // HelloWorldLayer implementation
 @implementation HelloWorldLayer
 
@@ -35,7 +54,7 @@
 
 -(void)placeTowerAtTileCoordinate:(CGPoint)coords
 {
-	[self.background setTileGID:47 at:coords];
+	[self.tileMap setTile:@"Tower1" onLayer:self.background at:coords];
 	// need to update the path of all critters
 	for (CCNode *node in _panZoomLayer.children) {
 		if ([node isKindOfClass:[Critter class]]) {
@@ -47,7 +66,8 @@
 -(id) init
 {
 	if( (self=[super init])) {
-        
+        _towers = [NSMutableArray new];
+		_projectiles = [NSMutableArray new];
         self.tileMap = [CCTMXTiledMap tiledMapWithTMXFile:@"TileMap.tmx"];
         self.background = [_tileMap layerNamed:@"Background"];
         
@@ -217,6 +237,8 @@
 	// don't forget to call "super dealloc"
     self.tileMap = nil;
     self.background = nil;
+	[_towers release];
+	[_projectiles release];
 	[super dealloc];
 }
 @end
