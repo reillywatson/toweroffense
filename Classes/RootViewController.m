@@ -117,6 +117,7 @@
 		rect.size = CGSizeMake( screenRect.size.height, screenRect.size.width );
 	
 	CCDirector *director = [CCDirector sharedDirector];
+    [director setProjection:CCDirectorProjection2D];
 	EAGLView *glView = [director openGLView];
 	float contentScaleFactor = [director contentScaleFactor];
 	

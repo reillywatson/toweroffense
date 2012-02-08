@@ -81,6 +81,7 @@
         
         Critter *critter = [[[Critter alloc] initWithLayer:self] autorelease];
         critter.position = ccp(0,200);
+        critter.speed = 0.3;
         [_panZoomLayer addChild:critter]; 
         [critter moveToward:[self positionForTileCoordinate:ccp(49,35)]];
 		
