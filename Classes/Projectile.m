@@ -15,22 +15,30 @@
 {
 	if ((self = [super initWithFile:@"Projectile.png"])) {
 		_layer = layer;
+		[[_layer panZoomLayer] addChild:self z:2];
 		_velocity = velocity;
 		self.position = startPoint;
-		CCMoveTo *moveTo = [CCMoveTo actionWithDuration:ccpDistance(startPoint, endPoint) / velocity position:endPoint];
-		[self runAction:moveTo];
+		id actionMove = [CCMoveTo actionWithDuration:ccpDistance(startPoint, endPoint) / velocity position:endPoint];
+		id actionMoveDone = [CCCallFuncN actionWithTarget:self selector:@selector(removeSelf:)];
+		[self runAction:[CCSequence actions:actionMove, actionMoveDone, nil]];
 		[self schedule:@selector(doHitTest:) interval:0.2];
 	}
 	return self;
 }
 
+-(void)removeSelf:(id)_
+{
+	[[_layer panZoomLayer] removeChild:self cleanup:true];
+	[self release];
+}
+
 -(void)doHitTest:(ccTime)dt
 {
+	NSLog(@"BOX: %@", NSStringFromCGRect([self boundingBox]));
 	for (CCSprite *critter in [_layer critters]) {
 		if (CGRectIntersectsRect([critter boundingBox], [self boundingBox])) {
 			NSLog(@"HIT!!!!!!!!!");
-			[_layer removeChild:self cleanup:true];
-			[self release];
+			[self removeSelf:nil];
 			break;
 		}
 	}										

@@ -30,6 +30,7 @@
 -(CGPoint)tileCoordinateForPosition:(CGPoint)position;
 -(CGPoint)positionForTileCoordinate:(CGPoint)tileCoordinate;
 -(CCArray *)critters;
+-(CCLayer *)panZoomLayer;
 
 @property (nonatomic, retain) CCTMXTiledMap *tileMap;
 @property (nonatomic, retain) CCTMXLayer *background;

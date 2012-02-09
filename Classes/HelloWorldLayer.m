@@ -99,6 +99,10 @@
 	}
 }
 
+-(CCLayer *)panZoomLayer
+{
+	return _panZoomLayer;
+}
 
 -(CCArray *)critters
 {

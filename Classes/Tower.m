@@ -14,17 +14,17 @@
 
 // number of seconds between shots
 -(double)firingFrequency {
-	return 0.1;
+	return 0.5;
 }
 
 // pixel firing radius
 -(double)range {
-	return 40;
+	return 240;
 }
 
 // pixels-per-second of fired projectiles
 -(double)firingVelocity {
-	return 10;
+	return 50;
 }
 
 
@@ -47,14 +47,16 @@
 			maxDistance = distance;
 		}
 	}
-	return closest;
+	if (maxDistance <= [self range]) {
+		return closest;
+	}
+	return nil;
 }
 
 -(void)fireProjectileAt:(CGPoint)position {
 	CGRect rect = [self boundingBox];
 	CGPoint center = CGPointMake(rect.origin.x + (rect.size.width / 2), rect.origin.y + (rect.size.height / 2));
-	Projectile *projectile = [[Projectile alloc] initWithLayer:_layer startPoint:center endPoint:position velocity:[self firingVelocity]];
-	[_layer addChild:projectile];
+	[[Projectile alloc] initWithLayer:_layer startPoint:center endPoint:position velocity:[self firingVelocity]];
 }
 
 -(void)updateTargeting:(ccTime)dt
