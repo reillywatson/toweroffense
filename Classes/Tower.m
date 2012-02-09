@@ -14,17 +14,17 @@
 
 // number of seconds between shots
 -(double)firingFrequency {
-	return 0.5;
+	return 0.3;
 }
 
 // pixel firing radius
 -(double)range {
-	return 240;
+	return 800;
 }
 
 // pixels-per-second of fired projectiles
 -(double)firingVelocity {
-	return 50;
+	return 150;
 }
 
 
