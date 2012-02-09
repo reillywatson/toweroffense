@@ -147,7 +147,6 @@
 		[self placeTowerAtTileCoordinate:ccp(48,34)];
 		[self placeTowerAtTileCoordinate:ccp(48,35)];
 		[self placeTowerAtTileCoordinate:ccp(48,36)];
-		[self placeTowerAtTileCoordinate:ccp(48,36)];
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 22 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
 			[self placeTowerAtTileCoordinate:ccp(49,36)];
 		});
