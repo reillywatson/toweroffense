@@ -30,7 +30,7 @@
 
 -(id)initWithLayer:(HelloWorldLayer *)layer
 {
-	if ((self = [super initWithFile:@"Player.png"])) {
+	if ((self = [super initWithFile:@"teslacoil.png"])) {
 		_layer = layer;
 	}
 	[self schedule:@selector(updateTargeting:) interval:[self firingFrequency]];
