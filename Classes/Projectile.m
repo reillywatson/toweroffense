@@ -34,10 +34,8 @@
 
 -(void)doHitTest:(ccTime)dt
 {
-	NSLog(@"BOX: %@", NSStringFromCGRect([self boundingBox]));
 	for (CCSprite *critter in [_layer critters]) {
 		if (CGRectIntersectsRect([critter boundingBox], [self boundingBox])) {
-			NSLog(@"HIT!!!!!!!!!");
 			[self removeSelf:nil];
 			break;
 		}
