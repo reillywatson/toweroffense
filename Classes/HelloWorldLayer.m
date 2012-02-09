@@ -11,6 +11,7 @@
 #import "HelloWorldLayer.h"
 #import "ccMacros.h"
 #import "Critter.h"
+#import "Tower.h"
 
 @interface CCTMXTiledMap (PrivateExtensions)
 -(void)setTile:(NSString*)name onLayer:(CCTMXLayer *)layer at:(CGPoint)coords;
@@ -52,14 +53,72 @@
 	return scene;
 }
 
--(void)placeTowerAtTileCoordinate:(CGPoint)coords
+-(BOOL)tileAtCoordinate:(CGPoint)tileCoordinate hasProperty:(NSString *)property
 {
-	[self.tileMap setTile:@"Tower1" onLayer:self.background at:coords];
-	// need to update the path of all critters
+	NSArray *layers = [_tileMap allLayers];
+	for (CCTMXLayer *layer in layers) {
+		int tileGid = [layer tileGIDAt:tileCoordinate];
+		if (tileGid) {
+			NSDictionary *properties = [_tileMap propertiesForGID:tileGid];
+			if (properties) {
+				NSString *value = [properties valueForKey:property];
+				if (value) {
+					return YES;
+				}
+			}
+		}
+	}
+	return NO;
+}
+
+
+-(void)updateCritterPaths
+{
 	for (CCNode *node in _panZoomLayer.children) {
 		if ([node isKindOfClass:[Critter class]]) {
 			[((Critter *)node) updatePath];
 		}
+	}
+}
+
+-(NSArray *)towers
+{
+	NSMutableArray *allTowers = [[NSMutableArray new] autorelease];
+	for (CCNode *node in _panZoomLayer.children) {
+		if ([node isKindOfClass:[Tower class]]) {
+			[allTowers addObject:node];
+		}
+	}
+	return allTowers;
+}
+
+-(BOOL)towerAtTileCoordinate:(CGPoint)coords
+{
+	coords = [self positionForTileCoordinate:coords];
+	for (Tower *tower in [self towers]) {
+		if (CGRectContainsPoint([tower boundingBox], coords)) {
+			return YES;
+		}
+	}
+	return NO;
+}
+
+-(BOOL)canPlaceTowerAtTileCoordinate:(CGPoint)coords
+{
+	return ![self towerAtTileCoordinate:coords] && ![self tileAtCoordinate:coords hasProperty:@"Collidable"];
+}
+
+-(void)placeTowerAtTileCoordinate:(CGPoint)coords
+{
+	if ([self canPlaceTowerAtTileCoordinate:coords]) {
+		Tower *tower = [[Tower alloc] initWithLayer:self];
+		tower.position = ccp((coords.x * 32) + 16, self.background.contentSize.height - (coords.y * 32) - 16);
+		[_panZoomLayer addChild:tower z:1];
+		
+		[self updateCritterPaths];
+	}
+	else {
+		NSLog(@"Tower already at coordinate %@", NSStringFromCGPoint(coords));
 	}
 }
 
@@ -87,6 +146,7 @@
 		
 		[self placeTowerAtTileCoordinate:ccp(48,34)];
 		[self placeTowerAtTileCoordinate:ccp(48,35)];
+		[self placeTowerAtTileCoordinate:ccp(48,36)];
 		[self placeTowerAtTileCoordinate:ccp(48,36)];
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 22 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
 			[self placeTowerAtTileCoordinate:ccp(49,36)];
@@ -121,27 +181,9 @@
     }
 }
 
--(BOOL)tileAtCoordinate:(CGPoint)tileCoordinate hasProperty:(NSString *)property
-{
-	NSArray *layers = [_tileMap allLayers];
-	for (CCTMXLayer *layer in layers) {
-		int tileGid = [layer tileGIDAt:tileCoordinate];
-		if (tileGid) {
-			NSDictionary *properties = [_tileMap propertiesForGID:tileGid];
-			if (properties) {
-				NSString *value = [properties valueForKey:property];
-				if (value) {
-					return YES;
-				}
-			}
-		}
-	}
-	return NO;
-}
-
 -(BOOL)isWallAtTileCoordinate:(CGPoint)tileCoordinate
 {
-	return [self tileAtCoordinate:tileCoordinate hasProperty:@"Collidable"];
+	return [self towerAtTileCoordinate:tileCoordinate] || [self tileAtCoordinate:tileCoordinate hasProperty:@"Collidable"];
 }
 
 -(BOOL)isBaseAtTileCoordinate:(CGPoint)tileCoordinate
