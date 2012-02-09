@@ -157,8 +157,6 @@
 -(id) init
 {
 	if( (self=[super init])) {
-        _towers = [NSMutableArray new];
-		_projectiles = [NSMutableArray new];
         self.tileMap = [CCTMXTiledMap tiledMapWithTMXFile:@"TileMap.tmx"];
         self.background = [_tileMap layerNamed:@"Background"];
         
@@ -310,8 +308,6 @@
 	// don't forget to call "super dealloc"
     self.tileMap = nil;
     self.background = nil;
-	[_towers release];
-	[_projectiles release];
 	[super dealloc];
 }
 @end
