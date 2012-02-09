@@ -13,6 +13,24 @@
 #import "Critter.h"
 #import "Tower.h"
 
+@interface CCArray (PrivateExtensions)
+-(CCArray *)arrayWithMembersOfClass:(Class)class;
+@end
+
+@implementation CCArray (PrivateExtensions)
+
+-(CCArray *)arrayWithMembersOfClass:(Class)class
+{
+	CCArray *array = [[CCArray new] autorelease];
+	for (id i in self) {
+		if ([i isKindOfClass:class]) {
+			[array addObject:i];
+		}
+	}
+	return array;
+}
+@end
+
 @interface CCTMXTiledMap (PrivateExtensions)
 -(void)setTile:(NSString*)name onLayer:(CCTMXLayer *)layer at:(CGPoint)coords;
 @end
@@ -81,15 +99,15 @@
 	}
 }
 
--(NSArray *)towers
+
+-(CCArray *)critters
 {
-	NSMutableArray *allTowers = [[NSMutableArray new] autorelease];
-	for (CCNode *node in _panZoomLayer.children) {
-		if ([node isKindOfClass:[Tower class]]) {
-			[allTowers addObject:node];
-		}
-	}
-	return allTowers;
+	return [_panZoomLayer.children arrayWithMembersOfClass:[Critter class]];
+}
+
+-(CCArray *)towers
+{
+	return [_panZoomLayer.children arrayWithMembersOfClass:[Tower class]];
 }
 
 -(BOOL)towerAtTileCoordinate:(CGPoint)coords

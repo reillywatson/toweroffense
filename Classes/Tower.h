@@ -7,11 +7,13 @@
 //
 
 #import "cocos2d.h"
+#import "Critter.h"
 
 @class HelloWorldLayer;
 
 @interface Tower : CCSprite {
 	HelloWorldLayer *_layer;
+	Critter *_currentTarget;
 }
 
 -(id)initWithLayer:(HelloWorldLayer *)layer;

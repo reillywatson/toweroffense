@@ -8,8 +8,13 @@
 
 #import "cocos2d.h"
 
-@interface Projectile : CCSprite {
+@class HelloWorldLayer;
 
+@interface Projectile : CCSprite {
+	HelloWorldLayer *_layer;
+	double _velocity;
 }
+
+-(id)initWithLayer:(HelloWorldLayer*)layer startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint velocity:(double)velocity;
 
 @end

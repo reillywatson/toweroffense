@@ -29,6 +29,7 @@
 -(BOOL)isWallAtTileCoordinate:(CGPoint)tileCoordinate;
 -(CGPoint)tileCoordinateForPosition:(CGPoint)position;
 -(CGPoint)positionForTileCoordinate:(CGPoint)tileCoordinate;
+-(CCArray *)critters;
 
 @property (nonatomic, retain) CCTMXTiledMap *tileMap;
 @property (nonatomic, retain) CCTMXLayer *background;
