@@ -11,6 +11,7 @@
 @class RootViewController;
 
 @interface toweroffenseAppDelegate : NSObject <UIApplicationDelegate> {
+@public
 	UIWindow			*window;
 	RootViewController	*viewController;
 }

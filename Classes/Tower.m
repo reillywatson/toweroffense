@@ -19,7 +19,7 @@
 
 // pixel firing radius
 -(double)range {
-	return 800;
+	return 500;
 }
 
 // pixels-per-second of fired projectiles

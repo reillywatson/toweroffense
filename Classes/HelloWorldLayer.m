@@ -12,6 +12,7 @@
 #import "ccMacros.h"
 #import "Critter.h"
 #import "Tower.h"
+#import "toweroffenseAppDelegate.h"
 
 @interface CCArray (PrivateExtensions)
 -(CCArray *)arrayWithMembersOfClass:(Class)class;
@@ -157,6 +158,10 @@
         [_panZoomLayer addChild:_tileMap z:0 tag: 1];
         _panZoomLayer.minScale = 1.0f;
         _panZoomLayer.rubberEffectRatio = 0.0f;
+		
+		UILongPressGestureRecognizer* recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressFrom:)];
+		recognizer.minimumPressDuration = 2.0; // seconds
+		[[((toweroffenseAppDelegate*)([[UIApplication sharedApplication] delegate]))->viewController view] addGestureRecognizer:recognizer];
                 
         // TODO figure out the right bounds for the map.
         
@@ -174,6 +179,14 @@
 		});
 	}
 	return self;
+}
+
+-(void)handleLongPressFrom:(UIGestureRecognizer *)recognizer
+{
+	CGPoint rawLocation = [recognizer locationInView:[((toweroffenseAppDelegate*)([[UIApplication sharedApplication] delegate]))->viewController view]];
+	CGPoint location = [_panZoomLayer convertToNodeSpace:[[CCDirector sharedDirector] convertToGL: rawLocation]];
+	CGPoint tileCoord = [self tileCoordinateForPosition:location];
+	[self placeTowerAtTileCoordinate:tileCoord];
 }
 
 -(void)setViewpointCenter:(CGPoint) position
