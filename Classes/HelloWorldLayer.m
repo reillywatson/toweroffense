@@ -93,10 +93,8 @@
 
 -(void)updateCritterPaths
 {
-	for (CCNode *node in _panZoomLayer.children) {
-		if ([node isKindOfClass:[Critter class]]) {
-			[((Critter *)node) updatePath];
-		}
+	for (Critter *critter in [self critters]) {
+		[critter updatePath];
 	}
 }
 
@@ -145,6 +143,17 @@
 	}
 }
 
+-(void)addCritter
+{
+	Critter *critter = [[[Critter alloc] initWithLayer:self] autorelease];
+	critter.position = ccp(0,200);
+	critter.speed = 0.3;
+	[_panZoomLayer addChild:critter];
+	NSLog(@"suspcicious!");
+	[critter moveToward:[self positionForTileCoordinate:ccp(49,35)]];	
+	NSLog(@"confirmed!");
+}
+
 -(id) init
 {
 	if( (self=[super init])) {
@@ -162,21 +171,8 @@
 		UILongPressGestureRecognizer* recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressFrom:)];
 		recognizer.minimumPressDuration = 2.0; // seconds
 		[[((toweroffenseAppDelegate*)([[UIApplication sharedApplication] delegate]))->viewController view] addGestureRecognizer:recognizer];
-                
         // TODO figure out the right bounds for the map.
-        
-        Critter *critter = [[[Critter alloc] initWithLayer:self] autorelease];
-        critter.position = ccp(0,200);
-        critter.speed = 0.3;
-        [_panZoomLayer addChild:critter]; 
-        [critter moveToward:[self positionForTileCoordinate:ccp(49,35)]];
-		
-		[self placeTowerAtTileCoordinate:ccp(48,34)];
-		[self placeTowerAtTileCoordinate:ccp(48,35)];
-		[self placeTowerAtTileCoordinate:ccp(48,36)];
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 22 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
-			[self placeTowerAtTileCoordinate:ccp(49,36)];
-		});
+		[self schedule:@selector(addCritter) interval:3];
 	}
 	return self;
 }

@@ -21,6 +21,7 @@
 	CCAction *currentStepAction;
     NSValue *pendingMove;
 	CGPoint _target;
+	double _health;
 }
 
 @property double speed;
@@ -28,5 +29,8 @@
 - (id)initWithLayer:(HelloWorldLayer *)layer;
 - (void)moveToward:(CGPoint)target;
 - (void)updatePath;
+- (double)startHealth;
+- (double) health;
+- (void)takeDamage:(double)damage;
 
 @end

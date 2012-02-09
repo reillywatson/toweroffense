@@ -13,8 +13,9 @@
 @interface Projectile : CCSprite {
 	HelloWorldLayer *_layer;
 	double _velocity;
+	double _damage;
 }
 
--(id)initWithLayer:(HelloWorldLayer*)layer startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint velocity:(double)velocity;
+-(id)initWithLayer:(HelloWorldLayer*)layer startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint velocity:(double)velocity damage:(double)damage;
 
 @end

@@ -55,12 +55,20 @@
 @synthesize pendingMove;
 @synthesize speed;
 
+-(double) startHealth {
+	return 30;
+}
+
+-(double)health {
+	return _health;
+}
+
 
 - (id)initWithLayer:(HelloWorldLayer *)layer
 {
     if ((self = [super initWithFile:@"Player.png"])) {
         _layer = layer;
-		
+		_health = [self startHealth];
 		spOpenSteps = nil;
 		spClosedSteps = nil;
         shortestPath = nil;
@@ -78,6 +86,13 @@
 	[currentStepAction release]; currentStepAction = nil;
 	[pendingMove release]; pendingMove = nil;
 	[super dealloc];
+}
+
+-(void)takeDamage:(double)damage {
+	_health -= damage;
+	if (_health < 0) {
+		[[_layer panZoomLayer] removeChild:self cleanup:YES];
+	}
 }
 
 - (void)updatePath

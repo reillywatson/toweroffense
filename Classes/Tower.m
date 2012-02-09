@@ -27,6 +27,10 @@
 	return 150;
 }
 
+-(double)damage {
+	return 5;
+}
+
 
 -(id)initWithLayer:(HelloWorldLayer *)layer
 {
@@ -56,7 +60,7 @@
 -(void)fireProjectileAt:(CGPoint)position {
 	CGRect rect = [self boundingBox];
 	CGPoint center = CGPointMake(rect.origin.x + (rect.size.width / 2), rect.origin.y + (rect.size.height / 2));
-	[[Projectile alloc] initWithLayer:_layer startPoint:center endPoint:position velocity:[self firingVelocity]];
+	[[Projectile alloc] initWithLayer:_layer startPoint:center endPoint:position velocity:[self firingVelocity] damage:[self damage]];
 }
 
 -(void)updateTargeting:(ccTime)dt
