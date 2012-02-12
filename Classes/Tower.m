@@ -24,7 +24,7 @@
 
 // pixels-per-second of fired projectiles
 -(double)firingVelocity {
-	return 150;
+	return 350;
 }
 
 -(double)damage {

@@ -149,9 +149,7 @@
 	critter.position = ccp(0,200);
 	critter.speed = 0.3;
 	[_panZoomLayer addChild:critter];
-	NSLog(@"suspcicious!");
 	[critter moveToward:[self positionForTileCoordinate:ccp(49,35)]];	
-	NSLog(@"confirmed!");
 }
 
 -(id) init
